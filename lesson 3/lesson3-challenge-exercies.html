@@ -23,6 +23,8 @@
 
 				async function sendMessage() {
 					if (isLoading || inputText === '') return;
+					setIsLoading(true);
+
 					const newChatMessages = [
 						...chatMessages,
 						{
@@ -31,14 +33,20 @@
 							id: crypto.randomUUID()
 						}
 					];
-
-					setChatMessages(newChatMessages);
 					
 					setInputText('');
+					
+					setChatMessages([
+						...newChatMessages,
+						{
+							message: 'Loading...',
+							sender: 'robot',
+							id: crypto.randomUUID()
+						}
+					]);
 
 					const response = await Chatbot.getResponseAsync(inputText);
 
-					
 					setChatMessages([
 						...newChatMessages,
 						{
@@ -47,6 +55,7 @@
 							id: crypto.randomUUID()
 						}
 					]);
+					setIsLoading(false);
 				}
 
 				function handleKeyDown(event) {
